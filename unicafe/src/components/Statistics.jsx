@@ -1,25 +1,37 @@
+import { useFeedbackStore } from '../useFeedbackStore'
+
+const StatisticLine = ({ text, value, symbol = '' }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value} {symbol}</td>
+  </tr>
+)
+
 const Statistics = () => {
-  const good = 0
-  const neutral = 0
-  const bad = 0
-  const all = 0
-  const average = 0
-  const positive = 0
-  
+  const good = useFeedbackStore((state) => state.good)
+  const neutral = useFeedbackStore((state) => state.neutral)
+  const bad = useFeedbackStore((state) => state.bad)
+
+  const total = good + neutral + bad
+
+  if (total === 0) {
+    return <div>No feedback given</div>
+  }
+
+  const average = (good - bad) / total
+  const positive = (good / total) * 100
+
   return (
-    <div>
-      <h2>statistics</h2>
-      <table>
-        <tbody>
-          <tr><td>good</td><td>{good}</td></tr>
-          <tr><td>neutral</td><td>{neutral}</td></tr>
-          <tr><td>bad</td><td>{bad}</td></tr>
-          <tr><td>all</td><td>{all}</td></tr>
-          <tr><td>average</td><td>{average}</td></tr>
-          <tr><td>positive</td><td>{positive}</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={total} />
+        <StatisticLine text="average" value={average.toFixed(2)} />
+        <StatisticLine text="positive" value={positive.toFixed(2)} symbol="%" />
+      </tbody>
+    </table>
   )
 }
 

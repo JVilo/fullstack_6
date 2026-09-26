@@ -1,10 +1,17 @@
+import { useFeedbackStore } from '../useFeedbackStore'
+
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 const Buttons = () => {
+  const increaseGood = useFeedbackStore((state) => state.increaseGood)
+  const increaseNeutral = useFeedbackStore((state) => state.increaseNeutral)
+  const increaseBad = useFeedbackStore((state) => state.increaseBad)
+
   return (
     <div>
-      <h2>give feedback</h2>
-      <button>good</button>
-      <button>neutral</button>
-      <button>bad</button>
+      <Button onClick={increaseGood} text="good" />
+      <Button onClick={increaseNeutral} text="neutral" />
+      <Button onClick={increaseBad} text="bad" />
     </div>
   )
 }
