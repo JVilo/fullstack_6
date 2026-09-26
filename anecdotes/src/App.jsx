@@ -1,4 +1,5 @@
 import { useAnecdotes, useVoteOf } from './store'
+import AnecdoteForm from './AnecdoteForm'
 
 const App = () => {
   const anecdotes = useAnecdotes()
@@ -21,12 +22,7 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
-        <div>
-          <input data-testid="new" />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <AnecdoteForm />
     </div>
   )
 }

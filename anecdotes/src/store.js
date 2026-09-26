@@ -11,7 +11,7 @@ const anecdotesAtStart = [
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = anecdote => ({
+const asObject = (anecdote) => ({
   content: anecdote,
   id: getId(),
   votes: 0
@@ -27,7 +27,14 @@ const useAnecdoteStore = create((set) => ({
           : anecdote
       ),
     })),
+  actions: {
+    add: (content) =>
+      set((state) => ({
+        anecdotes: state.anecdotes.concat(asObject(content))
+      })),
+  },
 }))
 
 export const useAnecdotes = () => useAnecdoteStore((state) => state.anecdotes)
 export const useVoteOf = () => useAnecdoteStore((state) => state.voteOf)
+export const useAnecdoteActions = () => useAnecdoteStore((state) => state.actions)
