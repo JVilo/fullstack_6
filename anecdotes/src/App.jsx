@@ -1,10 +1,11 @@
-import { useAnecdotes } from "./store"
+import { useAnecdotes, useVoteOf } from './store'
 
 const App = () => {
   const anecdotes = useAnecdotes()
+  const voteOf = useVoteOf()
 
-  const vote = (id) => {
-    console.log("vote", id)
+  const handleVote = (id) => {
+    voteOf(id)
   }
 
   return (
@@ -15,7 +16,7 @@ const App = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => handleVote(anecdote.id)}>vote</button>
           </div>
         </div>
       ))}
@@ -24,7 +25,7 @@ const App = () => {
         <div>
           <input data-testid="new" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   )
