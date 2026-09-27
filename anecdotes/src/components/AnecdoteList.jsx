@@ -1,9 +1,16 @@
 import { useAnecdotes, useFilter, useVoteOf } from '../store'
+import { useSetNotification } from '../notificationStore'
 
 const AnecdoteList = () => {
   const anecdotes = useAnecdotes()
   const filter = useFilter()
   const voteOf = useVoteOf()
+  const setNotification = useSetNotification()
+
+  const handleVote = (anecdote) => {
+    voteOf(anecdote.id)
+    setNotification(`you voted '${anecdote.content}'`, 5)
+  }
 
   const filteredAnecdotes = anecdotes.filter((anecdote) =>
     anecdote.content.toLowerCase().includes(filter.toLowerCase())
@@ -18,7 +25,7 @@ const AnecdoteList = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => voteOf(anecdote.id)}>vote</button>
+            <button onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
       ))}
