@@ -1,7 +1,9 @@
 import { useAnecdotes } from '../hooks/useAnecdotes'
+import { useNotificationDispatch } from '../NotificationContext'
 
 const AnecdoteForm = () => {
   const { addAnecdote } = useAnecdotes()
+  const dispatch = useNotificationDispatch()
 
   const onCreate = (event) => {
     event.preventDefault()
@@ -10,6 +12,10 @@ const AnecdoteForm = () => {
 
     if (content.trim()) {
       addAnecdote(content)
+      dispatch({ type: 'SET_NOTIFICATION', payload: `anecdote '${content}' created` })
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
+      }, 5000)
     }
   }
 
