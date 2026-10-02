@@ -1,11 +1,9 @@
 import { useAnecdotes } from './hooks/useAnecdotes'
-import { useNotificationDispatch } from './NotificationContext'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 
 const App = () => {
   const { anecdotes, isPending, isError, voteAnecdote } = useAnecdotes()
-  const dispatch = useNotificationDispatch()
 
   if (isPending) {
     return <div>loading data...</div>
@@ -17,10 +15,6 @@ const App = () => {
 
   const handleVote = (anecdote) => {
     voteAnecdote(anecdote)
-    dispatch({ type: 'SET_NOTIFICATION', payload: `anecdote '${anecdote.content}' voted` })
-    setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' })
-    }, 5000)
   }
 
   return (
