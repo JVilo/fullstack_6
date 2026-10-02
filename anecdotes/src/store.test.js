@@ -85,3 +85,31 @@ describe('useAnecdotes filtering', () => {
     expect(filteredAnecdotes).toEqual([mockAnecdotes[0], mockAnecdotes[2]])
   })
 })
+describe('voting', () => {
+  it('increases the number of votes for an anecdote', async () => {
+    const initialAnecdote = { id: 1, content: 'Testing voting', votes: 0 }
+    const updatedAnecdote = { id: 1, content: 'Testing voting', votes: 1 }
+
+    anecdoteService.getAll.mockResolvedValue([initialAnecdote])
+    anecdoteService.update.mockResolvedValue(updatedAnecdote)
+
+    const { result: actionsResult } = renderHook(() => useAnecdoteActions())
+
+    await act(async () => {
+      await actionsResult.current.initialize()
+    })
+
+    await act(async () => {
+      await actionsResult.current.voteOf(1)
+    })
+
+    expect(anecdoteService.update).toHaveBeenCalledWith(1, {
+      id: 1,
+      content: 'Testing voting',
+      votes: 1,
+    })
+
+    const { result: anecdotesResult } = renderHook(() => useAnecdotes())
+    expect(anecdotesResult.current[0].votes).toBe(1)
+  })
+})
