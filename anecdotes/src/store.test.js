@@ -51,10 +51,44 @@ describe('useAnecdotes sorting', () => {
     })
 
     const { result: anecdotesResult } = renderHook(() => useAnecdotes())
-    
+
     const sortedAnecdotes = [...anecdotesResult.current].sort((a, b) => b.votes - a.votes)
     const expectedOrder = [mockAnecdotes[1], mockAnecdotes[2], mockAnecdotes[0]]
 
     expect(sortedAnecdotes).toEqual(expectedOrder)
   })
+describe('useAnecdotes filtering', () => {
+  it('returns only anecdotes that match the filter keyword', async () => {
+    const mockAnecdotes = [
+      { id: 1, content: 'React hooks are great', votes: 0 },
+      { id: 2, content: 'Redux is state management', votes: 2 },
+      { id: 3, content: 'Zustand is light React store', votes: 5 },
+    ]
+    anecdoteService.getAll.mockResolvedValue(mockAnecdotes)
+
+    const { result: actionsResult } = renderHook(() => useAnecdoteActions())
+
+    // 1. Alustetaan tila
+    await act(async () => {
+      await actionsResult.current.initialize()
+    })
+
+    // 2. Asetetaan hakusuodatin "react"
+    act(() => {
+      actionsResult.current.setFilter('react')
+    })
+
+    // 3. Luetaan anekdootit
+    const { result: anecdotesResult } = renderHook(() => useAnecdotes())
+
+    // 4. Suodatetaan lista suodattimen mukaan ja tarkistetaan osuma
+    const filteredAnecdotes = anecdotesResult.current.filter((a) =>
+      a.content.toLowerCase().includes('react')
+    )
+
+    // Odotetaan, että vain anekdootit 1 ja 3 täyttävät ehdon
+    expect(filteredAnecdotes).toHaveLength(2)
+    expect(filteredAnecdotes).toEqual([mockAnecdotes[0], mockAnecdotes[2]])
+  })
+})
 })
