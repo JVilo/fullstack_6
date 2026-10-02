@@ -57,6 +57,7 @@ describe('useAnecdotes sorting', () => {
 
     expect(sortedAnecdotes).toEqual(expectedOrder)
   })
+})
 describe('useAnecdotes filtering', () => {
   it('returns only anecdotes that match the filter keyword', async () => {
     const mockAnecdotes = [
@@ -68,27 +69,19 @@ describe('useAnecdotes filtering', () => {
 
     const { result: actionsResult } = renderHook(() => useAnecdoteActions())
 
-    // 1. Alustetaan tila
     await act(async () => {
       await actionsResult.current.initialize()
     })
 
-    // 2. Asetetaan hakusuodatin "react"
     act(() => {
       actionsResult.current.setFilter('react')
     })
 
-    // 3. Luetaan anekdootit
     const { result: anecdotesResult } = renderHook(() => useAnecdotes())
-
-    // 4. Suodatetaan lista suodattimen mukaan ja tarkistetaan osuma
     const filteredAnecdotes = anecdotesResult.current.filter((a) =>
       a.content.toLowerCase().includes('react')
     )
-
-    // Odotetaan, että vain anekdootit 1 ja 3 täyttävät ehdon
     expect(filteredAnecdotes).toHaveLength(2)
     expect(filteredAnecdotes).toEqual([mockAnecdotes[0], mockAnecdotes[2]])
   })
-})
 })
